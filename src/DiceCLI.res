@@ -7,8 +7,6 @@ let toArray = string => string->Js.String.castToArrayLike->Js.Array.fromMap(s =>
 
 let _FRENCH_SYNTAX = true
 
-type fight = {attack: array<string>, defense: array<string>, result: array<string>}
-
 let parseCLI = command => {
   let attack = ref(list{})
   let defense = ref(list{})
@@ -44,11 +42,27 @@ let parseCLI = command => {
     }
   })
 
+  // count the number of face
+  let pack = roll => {
+    open Js.Dict
+    let result = fromArray([])
+    roll->Belt.Array.forEach(face =>
+      result->set(
+        face,
+        switch result->get(face) {
+        | Some(int) => int + 1
+        | None => 1
+        },
+      )
+    )
+    result
+  }
+
   // compute and print the result of the fight
   {
-    attack: attack.contents->toString,
-    defense: defense.contents->toString,
-    result: fight(attack.contents, defense.contents)->toString,
+    "attack": attack.contents->toString->pack,
+    "defense": defense.contents->toString->pack,
+    "result": fight(attack.contents, defense.contents)->toString->pack,
   }->Js.log
 }
 
