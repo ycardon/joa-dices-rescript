@@ -51,7 +51,7 @@ let fight = (attack, defense) => {
   fight->keep(face => face != Shield)
 }
 
-// print a roll (list<faces>)
+// print a roll
 let toString = roll => roll->map(face =>
     switch face {
     | Kill => "Kill"
