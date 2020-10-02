@@ -16,42 +16,64 @@ function parseCLI(command) {
   var isDefense = {
     contents: false
   };
-  var addDice = function (times, dice) {
+  var partialInt = {
+    contents: ""
+  };
+  var addDice = function (dice) {
+    var times = Belt_Int.fromString(partialInt.contents);
+    var times$1 = times !== undefined ? times : 1;
+    partialInt.contents = "";
     if (isDefense.contents) {
-      defense.contents = Belt_List.concat(defense.contents, Dices$JoaDicesRescript.roll(times, dice));
+      defense.contents = Belt_List.concat(defense.contents, Dices$JoaDicesRescript.roll(times$1, dice));
     } else {
-      attack.contents = Belt_List.concat(attack.contents, Dices$JoaDicesRescript.roll(times, dice));
+      attack.contents = Belt_List.concat(attack.contents, Dices$JoaDicesRescript.roll(times$1, dice));
     }
     
   };
-  Belt_Array.forEach(command, (function (arg) {
-          var $$int = Belt_Int.fromString(arg.slice(0, -1));
-          var times = $$int !== undefined ? $$int : 1;
-          var error = arg.slice(-1).toUpperCase();
-          switch (error) {
+  Belt_Array.forEach(Array.from(command, (function (s) {
+              return s;
+            })), (function (c) {
+          var other = c.toUpperCase();
+          switch (other) {
+            case " " :
+                return ;
+            case "+" :
+                isDefense.contents = false;
+                return ;
             case "-" :
-            case "/" :
-            case ":" :
                 isDefense.contents = true;
                 return ;
+            case "0" :
+            case "1" :
+            case "2" :
+            case "3" :
+            case "4" :
+            case "5" :
+            case "6" :
+            case "7" :
+            case "8" :
+            case "9" :
+                break;
             case "D" :
-                return addDice(times, Dices$JoaDicesRescript.doomDice);
+                return addDice(Dices$JoaDicesRescript.doomDice);
             case "G" :
-                return addDice(times, Dices$JoaDicesRescript.giganticDice);
+                return addDice(Dices$JoaDicesRescript.giganticDice);
             case "N" :
-                return addDice(times, Dices$JoaDicesRescript.blackDice);
+                return addDice(Dices$JoaDicesRescript.blackDice);
             case "R" :
-                return addDice(times, Dices$JoaDicesRescript.redDice);
+                return addDice(Dices$JoaDicesRescript.redDice);
             case "B" :
             case "W" :
-                return addDice(times, Dices$JoaDicesRescript.whiteDice);
+                return addDice(Dices$JoaDicesRescript.whiteDice);
             case "J" :
             case "Y" :
-                return addDice(times, Dices$JoaDicesRescript.yellowDice);
+                return addDice(Dices$JoaDicesRescript.yellowDice);
             default:
-              console.log(error, "is invalid, example: 3R W - 2Y");
+              console.log(other, "is invalid, example: 3R W - 2Y");
               return ;
           }
+          partialInt.contents = partialInt.contents + c;
+          
         }));
   console.log({
         attack: Dices$JoaDicesRescript.toString(attack.contents),
@@ -61,15 +83,10 @@ function parseCLI(command) {
   
 }
 
-parseCLI([
-      "3W",
-      "3R",
-      "-",
-      "B"
-    ]);
+parseCLI("+1WG -BG");
 
-var frenchSyntax = true;
+var _FRENCH_SYNTAX = true;
 
-exports.frenchSyntax = frenchSyntax;
+exports._FRENCH_SYNTAX = _FRENCH_SYNTAX;
 exports.parseCLI = parseCLI;
 /*  Not a pure module */

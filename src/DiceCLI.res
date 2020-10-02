@@ -1,39 +1,46 @@
 open Dices
 open Belt
-open Js.String2
+open Js.String
+
+let _FRENCH_SYNTAX = true
 
 type fight = {attack: array<string>, defense: array<string>, result: array<string>}
-
-let frenchSyntax = true
 
 let parseCLI = command => {
   let attack = ref(list{})
   let defense = ref(list{})
   let isDefense = ref(false)
+  let partialInt = ref("")
 
-  let addDice = (times, dice) =>
-    if isDefense.contents {
-      defense := defense.contents->List.concat(roll(times, dice))
-    } else {
-      attack := attack.contents->List.concat(roll(times, dice))
-    }
+  let toArray = string => string->castToArrayLike->Js.Array.fromMap(s => s)
 
-  // parse the command
-  command->Array.forEach(arg => {
-    let times = switch Int.fromString(arg->slice(~from=0, ~to_=-1)) {
-    | Some(int) => int
+  let addDice = dice => {
+    let times = switch Int.fromString(partialInt.contents) {
+    | Some(times) => times
     | None => 1
     }
-    switch arg->sliceToEnd(~from=-1)->toUpperCase {
-    | "N" => addDice(times, blackDice)
-    | "R" => addDice(times, redDice)
-    | "J" | "Y" => addDice(times, yellowDice)
-    | "B" => addDice(times, frenchSyntax ? whiteDice : blackDice)
-    | "W" => addDice(times, whiteDice)
-    | "G" => addDice(times, giganticDice)
-    | "D" => addDice(times, doomDice)
-    | "-" | "/" | ":" => isDefense := true
-    | error => Js.log2(error, "is invalid, example: 3R W - 2Y")
+    partialInt := ""
+    isDefense.contents
+      ? defense := defense.contents->List.concat(roll(times, dice))
+      : attack := attack.contents->List.concat(roll(times, dice))
+  }
+
+  // parse the command
+  command->toArray->Array.forEach(c => {
+    switch c->toUpperCase {
+    | "N" => addDice(blackDice)
+    | "R" => addDice(redDice)
+    | "J" | "Y" => addDice(yellowDice)
+    | "B" => addDice(_FRENCH_SYNTAX ? whiteDice : blackDice)
+    | "W" => addDice(whiteDice)
+    | "G" => addDice(giganticDice)
+    | "D" => addDice(doomDice)
+    | "-" => isDefense := true
+    | "+" => isDefense := false
+    | " " => ()
+    | "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" =>
+      partialInt := partialInt.contents ++ c
+    | other => Js.log2(other, "is invalid, example: 3R W - 2Y")
     }
   })
 
@@ -45,4 +52,4 @@ let parseCLI = command => {
   }->Js.log
 }
 
-parseCLI(["3W", "3R", "-", "B"])
+parseCLI("+1WG -BG")
