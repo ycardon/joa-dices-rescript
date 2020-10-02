@@ -1,4 +1,5 @@
 open Belt.List
+let toArray = Array.of_list
 
 // all possible faces
 type face =
@@ -35,12 +36,13 @@ let rec roll = (times, dice) =>
       }
 
 // count the number of a given face in a roll result
-let count = (roll, face) => roll->reduce(0, (n, i) => i == face ? n + 1 : n)
+let count = (roll, face) => roll->reduce(0, (c, f) => f == face ? c + 1 : c)
 
 // cancel roll faces by an amount of shield count
+// ((roll, int), face) => (roll, int)
 let cancel = ((roll, shieldCount), face) =>
-  roll->reduceReverse((list{}, shieldCount), ((r, s), f) =>
-    s <= 0 ? (r->add(f), 0) : f == face ? (r, s - 1) : (r->add(f), s)
+  roll->reduceReverse((list{}, shieldCount), ((r, sc), f) =>
+    sc <= 0 ? (r->add(f), 0) : f == face ? (r, sc - 1) : (r->add(f), sc)
   )
 
 // give the result of a fight (apply defence shields on the attack and remove shields from the attack)
@@ -62,4 +64,4 @@ let toString = roll => roll->map(face =>
     | Rally => "Rally"
     | DelayedRally => "Delayed Rally"
     }
-  )->Array.of_list
+  )->toArray

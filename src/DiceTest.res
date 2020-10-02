@@ -14,8 +14,10 @@ concat(roll(3, redDice), roll(2, yellowDice)) |> toString |> log
 let attack = roll(4, redDice)
 log("\n> attack")
 attack |> toString |> log
+
 let defense = roll(5, yellowDice)
 log("\n> defense")
 defense |> toString |> log
+
 log("\n> fight")
 fight(attack, defense) |> toString |> log

@@ -23,11 +23,11 @@ function roll(times, dice) {
 }
 
 function count(roll, face) {
-  return Belt_List.reduce(roll, 0, (function (n, i) {
-                if (Caml_obj.caml_equal(i, face)) {
-                  return n + 1 | 0;
+  return Belt_List.reduce(roll, 0, (function (c, f) {
+                if (Caml_obj.caml_equal(f, face)) {
+                  return c + 1 | 0;
                 } else {
-                  return n;
+                  return c;
                 }
               }));
 }
@@ -37,9 +37,9 @@ function cancel(param, face) {
               /* [] */0,
               param[1]
             ], (function (param, f) {
-                var s = param[1];
+                var sc = param[1];
                 var r = param[0];
-                if (s <= 0) {
+                if (sc <= 0) {
                   return [
                           Belt_List.add(r, f),
                           0
@@ -47,12 +47,12 @@ function cancel(param, face) {
                 } else if (Caml_obj.caml_equal(f, face)) {
                   return [
                           r,
-                          s - 1 | 0
+                          sc - 1 | 0
                         ];
                 } else {
                   return [
                           Belt_List.add(r, f),
-                          s
+                          sc
                         ];
                 }
               }));
@@ -93,6 +93,8 @@ function toString(roll) {
                     }
                   })));
 }
+
+var toArray = $$Array.of_list;
 
 var blackDice = {
   hd: /* Kill */0,
@@ -214,6 +216,7 @@ var doomDice = {
   }
 };
 
+exports.toArray = toArray;
 exports.blackDice = blackDice;
 exports.redDice = redDice;
 exports.yellowDice = yellowDice;

@@ -6,6 +6,16 @@ var Belt_List = require("bs-platform/lib/js/belt_List.js");
 var Belt_Array = require("bs-platform/lib/js/belt_Array.js");
 var Dices$JoaDicesRescript = require("./Dices.bs.js");
 
+function toLowerCase(prim) {
+  return prim.toLowerCase();
+}
+
+function toArray(string) {
+  return Array.from(string, (function (s) {
+                return s;
+              }));
+}
+
 function parseCLI(command) {
   var attack = {
     contents: /* [] */0
@@ -16,13 +26,13 @@ function parseCLI(command) {
   var isDefense = {
     contents: false
   };
-  var partialInt = {
+  var intPart = {
     contents: ""
   };
-  var addDice = function (dice) {
-    var times = Belt_Int.fromString(partialInt.contents);
+  var add = function (dice) {
+    var times = Belt_Int.fromString(intPart.contents);
     var times$1 = times !== undefined ? times : 1;
-    partialInt.contents = "";
+    intPart.contents = "";
     if (isDefense.contents) {
       defense.contents = Belt_List.concat(defense.contents, Dices$JoaDicesRescript.roll(times$1, dice));
     } else {
@@ -33,7 +43,7 @@ function parseCLI(command) {
   Belt_Array.forEach(Array.from(command, (function (s) {
               return s;
             })), (function (c) {
-          var other = c.toUpperCase();
+          var other = c.toLowerCase();
           switch (other) {
             case " " :
                 return ;
@@ -54,25 +64,25 @@ function parseCLI(command) {
             case "8" :
             case "9" :
                 break;
-            case "D" :
-                return addDice(Dices$JoaDicesRescript.doomDice);
-            case "G" :
-                return addDice(Dices$JoaDicesRescript.giganticDice);
-            case "N" :
-                return addDice(Dices$JoaDicesRescript.blackDice);
-            case "R" :
-                return addDice(Dices$JoaDicesRescript.redDice);
-            case "B" :
-            case "W" :
-                return addDice(Dices$JoaDicesRescript.whiteDice);
-            case "J" :
-            case "Y" :
-                return addDice(Dices$JoaDicesRescript.yellowDice);
+            case "d" :
+                return add(Dices$JoaDicesRescript.doomDice);
+            case "g" :
+                return add(Dices$JoaDicesRescript.giganticDice);
+            case "n" :
+                return add(Dices$JoaDicesRescript.blackDice);
+            case "r" :
+                return add(Dices$JoaDicesRescript.redDice);
+            case "b" :
+            case "w" :
+                return add(Dices$JoaDicesRescript.whiteDice);
+            case "j" :
+            case "y" :
+                return add(Dices$JoaDicesRescript.yellowDice);
             default:
-              console.log(other, "is invalid, example: 3R W - 2Y");
+              console.log(other, "is invalid, example: 3r w - 2yD");
               return ;
           }
-          partialInt.contents = partialInt.contents + c;
+          intPart.contents = intPart.contents + c;
           
         }));
   console.log({
@@ -83,10 +93,21 @@ function parseCLI(command) {
   
 }
 
-parseCLI("+1WG -BG");
+parseCLI("3B+10G -J-8N");
+
+var forEach = Belt_Array.forEach;
+
+var concat = Belt_List.concat;
+
+var toInt = Belt_Int.fromString;
 
 var _FRENCH_SYNTAX = true;
 
+exports.forEach = forEach;
+exports.concat = concat;
+exports.toInt = toInt;
+exports.toLowerCase = toLowerCase;
+exports.toArray = toArray;
 exports._FRENCH_SYNTAX = _FRENCH_SYNTAX;
 exports.parseCLI = parseCLI;
 /*  Not a pure module */
