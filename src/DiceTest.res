@@ -8,7 +8,7 @@ redDice |> roll(3) |> toString |> log
 
 // concatenate rolls
 log("\n> 3 red, 2 yellow")
-concat(roll(3, redDice), roll(2, yellowDice)) |> toString |> log
+concat(redDice |> roll(3), yellowDice |> roll(2)) |> toString |> log
 
 // a full fight
 let attack = roll(4, redDice)

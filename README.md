@@ -1,8 +1,6 @@
-# Basic Reason Template
+Rewrite of the typescript projet [JoA Dice](https://github.com/ycardon/joa-dices) in [rescript](https://rescript-lang.org)
 
-Hello! This project allows you to quickly get started with Reason and BuckleScript. If you wanted a more sophisticated version, try the `react` template (`bsb -theme react -init .`).
-
-# Build
+- Build
 
 ```bash
 # for yarn
@@ -12,7 +10,7 @@ yarn build
 npm run build
 ```
 
-# Build + Watch
+- Build + Watch
 
 ```bash
 # for yarn
