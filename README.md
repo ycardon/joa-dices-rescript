@@ -1,22 +1,8 @@
-Rewrite of the typescript projet [JoA Dice](https://github.com/ycardon/joa-dices) in [rescript](https://rescript-lang.org)
+Partial rewrite of the TypeScript project [JoA Dice](https://github.com/ycardon/joa-dices) in [ReScript](https://rescript-lang.org)
 
-- Build
+to be fair in term of language comparison, I have to note that the internal model used in this project is simpler than the previous one:
+- from `roll: map<face, count>` in typescript
+- to `roll: list<face>` in rescript
 
-```bash
-# for yarn
-yarn build
-
-# for npm
-npm run build
-```
-
-- Build + Watch
-
-```bash
-# for yarn
-yarn start
-
-# for npm
-npm run start
-```
+build with `npm run build`, build+watch with `npm run start`
 
