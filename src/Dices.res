@@ -48,7 +48,7 @@ let cancel = ((roll, shieldCount), face) =>
 // give the result of a fight (apply defence shields on the attack and remove shields from the attack)
 let fight = (attack, defense) => {
   let (fight, _) = (attack, defense->count(Shield))->cancel(Kill)->cancel(Disrupt)->cancel(Push)
-  fight->keep(face => face != Shield)
+  fight->keep(face => face != Shield)->keep(face => face != Blank)
 }
 
 // print a roll
