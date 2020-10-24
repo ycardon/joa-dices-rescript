@@ -1,5 +1,11 @@
 Partial rewrite of the TypeScript project [JoA Dice](https://github.com/ycardon/joa-dices) in [ReScript](https://rescript-lang.org)
 
+This is the 2nd edition of my language exploration project
+- [Typescript](https://github.com/ycardon/joa-dices) (original)
+- [Rescript](https://github.com/ycardon/joa-dices-rescript) (this one)
+- [Haskell](https://github.com/ycardon/joa-dices-haskell)
+- [Rust](https://github.com/ycardon/joa-dices-rust)
+
 to be fair in term of language comparison, I have to note that the internal model used in this project is simpler than the previous one:
 - from `roll: map<face, count>` in typescript
 - to `roll: list<face>` in rescript
